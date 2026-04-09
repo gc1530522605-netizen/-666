@@ -607,7 +607,7 @@
 </div>
 
 <script>
-    // 粒子背景
+    // ---------- 粒子背景 (保持不变) ----------
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let width = window.innerWidth, height = window.innerHeight;
@@ -654,7 +654,7 @@
     }
     animate();
 
-    // 滚动淡入
+    // 滚动淡入动画
     const fadeElements = document.querySelectorAll('.adv-card, .img-card, .step');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -665,10 +665,7 @@
         });
     }, { threshold: 0.1 });
     fadeElements.forEach(el => observer.observe(el));
-    // 为卡片添加visible样式
-    document.querySelectorAll('.adv-card').forEach(el => el.classList.add('fade-up'));
-    document.querySelectorAll('.img-card').forEach(el => el.classList.add('fade-up'));
-    // 手动添加可见类初始
+    document.querySelectorAll('.adv-card, .img-card').forEach(el => el.classList.add('fade-up'));
     const style = document.createElement('style');
     style.textContent = `.fade-up { opacity: 0; transform: translateY(30px); transition: all 0.6s; } .fade-up.visible { opacity: 1; transform: translateY(0); }`;
     document.head.appendChild(style);
@@ -678,45 +675,90 @@
     document.getElementById('backToTopBtn').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     document.getElementById('contactFloatBtn').addEventListener('click', () => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }));
 
-    // EmailJS 降级配置
-    const EMAILJS_CONFIG = { PUBLIC_KEY: "KTToKYZ7Rx-Rx793g", SERVICE_ID: "U67V9qzOyR3yJFUmwAKIt", TEMPLATE_ID: "template_a8lfafl" };
+    // ---------- EmailJS 配置（已修复） ----------
+    // ⚠️ 重要：请将下面的 PUBLIC_KEY 和 SERVICE_ID 替换为你自己在 EmailJS 后台获取的真实值！
+    // PUBLIC_KEY 获取位置：Dashboard → Account → API Keys → Public Key
+    // SERVICE_ID 获取位置：Dashboard → Email Services → 你的服务 → Service ID (通常以 service_ 开头)
+    const EMAILJS_CONFIG = {
+        PUBLIC_KEY: "YOUR_PUBLIC_KEY",      // 替换为你的 Public Key
+        SERVICE_ID: "YOUR_SERVICE_ID",      // 替换为你的 Service ID (格式如 service_xxxxx)
+        TEMPLATE_ID: "template_a8lfafl"     // 请确认模板ID是否正确，如不正确请替换
+    };
+
     let emailReady = false;
-    if (EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
-        emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
-        emailReady = true;
+    // 只有当 PUBLIC_KEY 和 SERVICE_ID 都不是占位符时才初始化
+    if (EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.PUBLIC_KEY !== "YOUR_PUBLIC_KEY" &&
+        EMAILJS_CONFIG.SERVICE_ID && EMAILJS_CONFIG.SERVICE_ID !== "YOUR_SERVICE_ID") {
+        try {
+            // ✅ 正确初始化方式 (v4 规范)
+            emailjs.init({ publicKey: EMAILJS_CONFIG.PUBLIC_KEY });
+            emailReady = true;
+            console.log("EmailJS 已初始化成功");
+        } catch (err) {
+            console.error("EmailJS 初始化失败:", err);
+        }
+    } else {
+        console.warn("⚠️ EmailJS 配置未完成: 请填写真实的 PUBLIC_KEY 和 SERVICE_ID");
     }
+
     const formEl = document.getElementById('contactForm');
     formEl.addEventListener('submit', async (e) => {
         e.preventDefault();
         const name = document.getElementById('userName').value.trim();
         const contact = document.getElementById('userContact').value.trim();
         const msg = document.getElementById('message').value.trim();
+        const statusDiv = document.getElementById('formStatus');
+
         if (!name || !contact || !msg) {
-            document.getElementById('formStatus').innerText = "❌ 请完整填写所有字段";
+            statusDiv.innerText = "❌ 请完整填写所有字段";
             return;
         }
+
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
         btn.textContent = "发送中...";
-        const statusDiv = document.getElementById('formStatus');
-        if (emailReady && EMAILJS_CONFIG.SERVICE_ID !== "YOUR_SERVICE_ID") {
+
+        if (emailReady) {
             try {
-                await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, { from_name: name, from_contact: contact, message: msg });
+                // 发送邮件，模板参数需与你的模板变量完全一致
+                await emailjs.send(
+                    EMAILJS_CONFIG.SERVICE_ID,
+                    EMAILJS_CONFIG.TEMPLATE_ID,
+                    {
+                        from_name: name,
+                        from_contact: contact,
+                        message: msg
+                        // 如果你的模板中还有其他变量（如 to_name, reply_to 等），请在此添加
+                    }
+                );
                 statusDiv.innerText = "✅ 留言发送成功！我们会尽快联系您。";
                 formEl.reset();
             } catch (err) {
-                statusDiv.innerText = "⚠️ 发送失败，请直接电话/微信联系。";
+                console.error("EmailJS 发送错误:", err);
+                // 输出更详细的错误信息
+                let errorMsg = "⚠️ 发送失败，请检查控制台或直接电话/微信联系。";
+                if (err.text) {
+                    errorMsg += ` 服务器响应: ${err.text}`;
+                }
+                statusDiv.innerText = errorMsg;
             }
         } else {
-            statusDiv.innerText = "📨 已收到留言（演示模式），正式配置EmailJS后可发送邮件。";
+            // 未配置 EmailJS 时的友好提示
+            statusDiv.innerText = "📨 留言已收到（演示模式）。如需真正发送邮件，请配置正确的 EmailJS 密钥。";
+            alert(`感谢 ${name} 的留言！当前为演示模式，邮件未实际发送。`);
             formEl.reset();
-            alert(`感谢 ${name} 的留言！当前为演示版本。`);
         }
+
         btn.disabled = false;
         btn.textContent = "发送留言 →";
-        setTimeout(() => statusDiv.innerText = "", 3000);
+        setTimeout(() => {
+            if (statusDiv.innerText !== "✅ 留言发送成功！我们会尽快联系您。") {
+                statusDiv.innerText = "";
+            }
+        }, 4000);
     });
 
+    // 平滑滚动导航
     document.querySelectorAll('.nav-links a').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
