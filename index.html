@@ -454,7 +454,6 @@
         </div>
     </section>
 
-    <!-- 服务范围 -->
     <section id="services" class="section">
         <div class="container">
             <div class="section-title">核心服务范围</div>
@@ -470,7 +469,6 @@
         </div>
     </section>
 
-    <!-- 核心优势板块 (新增) -->
     <section id="advantages" class="section">
         <div class="container">
             <div class="section-title">为什么选择我们</div>
@@ -499,7 +497,6 @@
         </div>
     </section>
 
-    <!-- 服务流程简图 (增加长度) -->
     <section class="section">
         <div class="container">
             <div class="section-title">合作流程</div>
@@ -528,7 +525,6 @@
         </div>
     </section>
 
-    <!-- 图片展示区 -->
     <section class="section">
         <div class="container">
             <div class="section-title">业务生态 · 前瞻布局</div>
@@ -550,7 +546,6 @@
         </div>
     </section>
 
-    <!-- 关于我们 -->
     <section id="about" class="section">
         <div class="container">
             <div class="section-title">关于飓智诚</div>
@@ -572,7 +567,6 @@
         </div>
     </section>
 
-    <!-- 联系表单 -->
     <section id="contact" class="section">
         <div class="container">
             <div class="form-section">
@@ -607,55 +601,48 @@
 </div>
 
 <script>
-    // 粒子背景
+    // 1. 初始化 EmailJS (填入您的 Key)
+    emailjs.init("KTToKYZ7Rx-Rx793g");
+
+    // 2. 粒子背景动画
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
-    let width = window.innerWidth, height = window.innerHeight;
-    let particles = [];
-
-    function resizeCanvas() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
+    let width, height, particles = [];
+    function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
     }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    class Particle {
-        constructor() {
-            this.x = Math.random() * width;
-            this.y = Math.random() * height;
+    window.addEventListener('resize', resize);
+    resize();
+    class P {
+        constructor() { this.reset(); }
+        reset() {
+            this.x = Math.random() * width; this.y = Math.random() * height;
+            this.vX = (Math.random()-0.5)*0.3; this.vY = (Math.random()-0.5)*0.2;
             this.radius = Math.random() * 2 + 1;
-            this.speedX = (Math.random() - 0.5) * 0.3;
-            this.speedY = (Math.random() - 0.5) * 0.2;
             this.opacity = Math.random() * 0.5 + 0.2;
         }
-        update() {
-            this.x += this.speedX;
-            this.y += this.speedY;
+        up() {
+            this.x += this.vX; this.y += this.vY;
             if (this.x < 0) this.x = width;
             if (this.x > width) this.x = 0;
             if (this.y < 0) this.y = height;
             if (this.y > height) this.y = 0;
         }
         draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(110, 231, 183, ${this.opacity})`;
-            ctx.fill();
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(110, 231, 183, ${this.opacity})`; ctx.fill();
         }
     }
-    for (let i = 0; i < 100; i++) particles.push(new Particle());
-    function animate() {
+    for (let i = 0; i < 100; i++) particles.push(new P());
+    function anim() {
         ctx.clearRect(0, 0, width, height);
-        particles.forEach(p => { p.update(); p.draw(); });
-        requestAnimationFrame(animate);
+        particles.forEach(p => { p.up(); p.draw(); });
+        requestAnimationFrame(anim);
     }
-    animate();
+    anim();
 
-    // 滚动淡入
-    const fadeElements = document.querySelectorAll('.adv-card, .img-card, .step');
+    // 3. 滚动淡入效果
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -664,66 +651,48 @@
             }
         });
     }, { threshold: 0.1 });
-    fadeElements.forEach(el => observer.observe(el));
-    // 为卡片添加visible样式
-    document.querySelectorAll('.adv-card').forEach(el => el.classList.add('fade-up'));
-    document.querySelectorAll('.img-card').forEach(el => el.classList.add('fade-up'));
-    // 手动添加可见类初始
-    const style = document.createElement('style');
-    style.textContent = `.fade-up { opacity: 0; transform: translateY(30px); transition: all 0.6s; } .fade-up.visible { opacity: 1; transform: translateY(0); }`;
-    document.head.appendChild(style);
-    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    document.querySelectorAll('.adv-card, .img-card, .step').forEach(el => observer.observe(el));
 
-    // 悬浮按钮
-    document.getElementById('backToTopBtn').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-    document.getElementById('contactFloatBtn').addEventListener('click', () => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }));
-
-    // EmailJS 降级配置
-    const EMAILJS_CONFIG = { PUBLIC_KEY: "KTToKYZ7Rx-Rx793g", SERVICE_ID: "U67V9qzOyR3yJFUmwAKIt", TEMPLATE_ID: "template_a8lfafl" };
-    let emailReady = false;
-    if (EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
-        emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
-        emailReady = true;
-    }
+    // 4. 发送逻辑 (直接触发发送)
     const formEl = document.getElementById('contactForm');
     formEl.addEventListener('submit', async (e) => {
         e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        const statusDiv = document.getElementById('formStatus');
+        
         const name = document.getElementById('userName').value.trim();
         const contact = document.getElementById('userContact').value.trim();
         const msg = document.getElementById('message').value.trim();
-        if (!name || !contact || !msg) {
-            document.getElementById('formStatus').innerText = "❌ 请完整填写所有字段";
-            return;
-        }
-        const btn = document.getElementById('submitBtn');
+
         btn.disabled = true;
-        btn.textContent = "发送中...";
-        const statusDiv = document.getElementById('formStatus');
-        if (emailReady && EMAILJS_CONFIG.SERVICE_ID !== "YOUR_SERVICE_ID") {
-            try {
-                await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, { from_name: name, from_contact: contact, message: msg });
-                statusDiv.innerText = "✅ 留言发送成功！我们会尽快联系您。";
-                formEl.reset();
-            } catch (err) {
-                statusDiv.innerText = "⚠️ 发送失败，请直接电话/微信联系。";
-            }
-        } else {
-            statusDiv.innerText = "📨 已收到留言（演示模式），正式配置EmailJS后可发送邮件。";
+        btn.textContent = "正在寄信...";
+        statusDiv.innerText = "⏳ 正在连接服务器...";
+
+        try {
+            await emailjs.send("U67V9qzOyR3yJFUmwAKIt", "template_a8lfafl", { 
+                from_name: name, 
+                from_contact: contact, 
+                message: msg 
+            });
+            statusDiv.innerText = "✅ 留言发送成功！我们会尽快联系您。";
             formEl.reset();
-            alert(`感谢 ${name} 的留言！当前为演示版本。`);
+        } catch (err) {
+            statusDiv.innerText = "❌ 发送异常，请微信联系：gcLookahead";
+        } finally {
+            btn.disabled = false;
+            btn.textContent = "发送留言 →";
         }
-        btn.disabled = false;
-        btn.textContent = "发送留言 →";
-        setTimeout(() => statusDiv.innerText = "", 3000);
     });
 
+    // 悬浮按钮及平滑滚动
+    document.getElementById('backToTopBtn').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    document.getElementById('contactFloatBtn').addEventListener('click', () => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }));
     document.querySelectorAll('.nav-links a').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
             if (href && href.startsWith("#")) {
                 e.preventDefault();
-                const target = document.querySelector(href);
-                if (target) target.scrollIntoView({ behavior: 'smooth' });
+                document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
             }
         });
     });
