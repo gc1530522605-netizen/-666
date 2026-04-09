@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>飓智诚网络科技工作室 | 科技驱动全球</title>
-    <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         * {
@@ -14,14 +13,13 @@
         }
 
         body {
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, 'PingFang SC', Roboto, sansapple-system, 'PingFang SC', Roboto, sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, 'PingFang SC', Roboto, sans-serif;
             background: #030507;
             color: #eef2ff;
             line-height: 1.5;
             overflow-x: hidden;
         }
 
-        /* 粒子画布背景 */
         #particle-canvas {
             position: fixed;
             top: 0;
@@ -38,7 +36,6 @@
             padding: 0 32px;
         }
 
-        /* 导航栏 */
         header {
             backdrop-filter: blur(14px);
             background: rgba(3, 5, 7, 0.65);
@@ -61,7 +58,6 @@
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            letter-spacing: -0.3px;
         }
         .nav-links {
             display: flex;
@@ -73,13 +69,11 @@
             color: #cbd5e6;
             font-weight: 500;
             transition: 0.2s;
-            font-size: 0.95rem;
         }
         .nav-links a:hover {
             color: #6ee7b7;
         }
 
-        /* 按钮样式 */
         .btn {
             display: inline-block;
             background: linear-gradient(95deg, #1f6e43, #2b8c54);
@@ -96,20 +90,16 @@
         .btn:hover {
             transform: translateY(-2px);
             background: linear-gradient(95deg, #2a8a55, #36a86b);
-            box-shadow: 0 10px 20px rgba(43, 124, 62, 0.3);
         }
         .btn-outline {
             background: transparent;
             border: 1px solid #6ee7b7;
             color: #e2f0e5;
-            box-shadow: none;
         }
         .btn-outline:hover {
             background: rgba(110, 231, 183, 0.08);
-            border-color: #9ef0cd;
         }
 
-        /* Hero */
         .hero {
             padding: 120px 0 100px;
             text-align: center;
@@ -128,16 +118,8 @@
             color: #9ab3cc;
             max-width: 700px;
             margin: 0 auto 32px;
-            line-height: 1.6;
-        }
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
         }
 
-        /* 通用章节 */
         .section {
             padding: 80px 0;
             border-bottom: 1px solid rgba(110, 231, 183, 0.08);
@@ -165,7 +147,7 @@
             flex-wrap: wrap;
             gap: 20px;
             justify-content: center;
-            margin: 20px 0 20px;
+            margin: 20px 0;
         }
         .service-tag {
             background: rgba(15, 25, 35, 0.75);
@@ -181,53 +163,86 @@
         }
         .service-tag:hover {
             border-color: #6ee7b7;
-            color: #ffffff;
             transform: scale(1.05);
             background: rgba(30, 50, 55, 0.9);
         }
 
-        /* 核心价值观卡片 */
-        .values-grid {
+        /* 核心优势卡片 */
+        .advantages-grid {
             display: flex;
             flex-wrap: wrap;
             gap: 32px;
             justify-content: center;
-            margin-top: 20px;
         }
-        .value-card {
+        .adv-card {
             background: rgba(15, 25, 35, 0.7);
             backdrop-filter: blur(4px);
             border-radius: 28px;
             padding: 32px 24px;
             flex: 1;
-            min-width: 200px;
+            min-width: 220px;
             text-align: center;
             border: 1px solid rgba(110, 231, 183, 0.2);
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             opacity: 0;
             transform: translateY(30px);
         }
-        .value-card.visible {
+        .adv-card.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        .value-card:hover {
+        .adv-card:hover {
             transform: translateY(-8px) scale(1.02);
             border-color: #6ee7b7;
             box-shadow: 0 20px 30px -12px rgba(0,0,0,0.5);
         }
-        .value-icon {
-            font-size: 3rem;
+        .adv-icon {
+            font-size: 2.8rem;
             margin-bottom: 20px;
         }
-        .value-card h3 {
-            font-size: 1.5rem;
+        .adv-card h3 {
+            font-size: 1.4rem;
             margin-bottom: 12px;
             color: #d1fae5;
         }
-        .value-card p {
+        .adv-card p {
             color: #9ab3cc;
             font-size: 0.9rem;
+        }
+
+        /* 服务流程步骤 */
+        .steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 20px;
+        }
+        .step {
+            flex: 1;
+            min-width: 180px;
+            text-align: center;
+            background: rgba(0,0,0,0.3);
+            border-radius: 32px;
+            padding: 24px 16px;
+            border: 1px solid rgba(110,231,183,0.15);
+            transition: 0.2s;
+        }
+        .step-num {
+            width: 48px;
+            height: 48px;
+            background: #2b8c54;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-weight: bold;
+            font-size: 1.4rem;
+        }
+        .step h4 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
         }
 
         /* 图片展示区 */
@@ -245,7 +260,7 @@
             overflow: hidden;
             background: #0f141c;
             border: 1px solid #2a3a32;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             opacity: 0;
             transform: translateY(30px);
         }
@@ -256,22 +271,19 @@
         .img-card:hover {
             transform: translateY(-8px) scale(1.02);
             border-color: #6ee7b7;
-            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.5);
         }
         .img-card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            display: block;
         }
         .img-card p {
             padding: 18px;
             text-align: center;
-            font-weight: 500;
             color: #c5f0db;
         }
 
-        /* 关于我们区域 */
+        /* 关于区域 */
         .about-wrapper {
             display: flex;
             flex-wrap: wrap;
@@ -289,8 +301,6 @@
         .about-text p {
             color: #b4c8e0;
             margin-bottom: 18px;
-            font-size: 1rem;
-            line-height: 1.6;
         }
         .contact-info-card {
             flex: 0.9;
@@ -300,22 +310,15 @@
             backdrop-filter: blur(4px);
             border: 1px solid rgba(110, 231, 183, 0.2);
         }
-        .contact-info-card h4 {
-            font-size: 1.4rem;
-            margin-bottom: 24px;
-            color: #e0f0e8;
-        }
         .contact-detail {
             margin: 20px 0;
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 1rem;
             color: #cbdae9;
-            word-break: break-all;
         }
 
-        /* 表单区域 */
+        /* 表单 */
         .form-section {
             margin-top: 60px;
             background: rgba(8, 12, 18, 0.7);
@@ -323,12 +326,6 @@
             padding: 48px 40px;
             backdrop-filter: blur(8px);
             border: 1px solid rgba(110, 231, 183, 0.2);
-        }
-        .form-title {
-            font-size: 1.8rem;
-            margin-bottom: 28px;
-            text-align: center;
-            color: #daf5e8;
         }
         .contact-form {
             display: flex;
@@ -345,34 +342,24 @@
             color: white;
             font-family: inherit;
             font-size: 1rem;
-            transition: 0.2s;
             width: 100%;
         }
         .contact-form input:focus, .contact-form textarea:focus {
             outline: none;
             border-color: #6ee7b7;
-            box-shadow: 0 0 10px rgba(110, 231, 183, 0.2);
         }
         .form-btn {
             background: linear-gradient(95deg, #1f6e43, #2b8c54);
             border: none;
-            width: auto;
             padding: 12px 32px;
             border-radius: 48px;
             font-weight: 600;
             cursor: pointer;
             color: white;
-            font-size: 1rem;
-            transition: 0.2s;
-        }
-        .form-btn:hover {
-            background: #36a86b;
-            transform: translateY(-2px);
         }
         .status-message {
             text-align: center;
             margin-top: 16px;
-            font-size: 0.9rem;
             color: #b9f3d0;
         }
 
@@ -392,13 +379,12 @@
         .footer-links a {
             color: #8ea3c2;
             text-decoration: none;
-            transition: 0.2s;
         }
         .footer-links a:hover {
             color: #6ee7b7;
         }
 
-        /* 悬浮快捷菜单 */
+        /* 悬浮菜单 */
         .floating-menu {
             position: fixed;
             right: 24px;
@@ -421,36 +407,20 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: 0.2s;
         }
         .floating-btn:hover {
             transform: scale(1.1);
             background: #2b8c54;
             color: white;
-            border-color: white;
         }
 
-        /* 响应式 */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.2rem; }
             .navbar { flex-direction: column; gap: 16px; }
             .section-title { font-size: 1.8rem; }
             .form-section { padding: 32px 24px; }
-            .service-tag { font-size: 0.85rem; padding: 8px 20px; }
             .floating-menu { right: 16px; bottom: 60px; }
-            .floating-btn { width: 44px; height: 44px; font-size: 1.4rem; }
-        }
-
-        /* 淡入动画基础类 */
-        .fade-up {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .fade-up.visible {
-            opacity: 1;
-            transform: translateY(0);
         }
     </style>
 </head>
@@ -464,7 +434,7 @@
             <ul class="nav-links">
                 <li><a href="#home">首页</a></li>
                 <li><a href="#services">服务范围</a></li>
-                <li><a href="#values">核心价值观</a></li>
+                <li><a href="#advantages">核心优势</a></li>
                 <li><a href="#about">关于我们</a></li>
                 <li><a href="#contact">联系</a></li>
             </ul>
@@ -473,7 +443,6 @@
 </header>
 
 <main>
-    <!-- Hero -->
     <section id="home" class="hero">
         <div class="container">
             <h1>飓智诚网络科技工作室</h1>
@@ -485,18 +454,76 @@
         </div>
     </section>
 
-    <!-- 服务范围胶囊标签 -->
+    <!-- 服务范围 -->
     <section id="services" class="section">
         <div class="container">
             <div class="section-title">核心服务范围</div>
             <div class="services-grid">
                 <span class="service-tag">🌐 互联网销售（除需许可商品）</span>
                 <span class="service-tag">📦 进出口综合服务（货物/技术/代理）</span>
-                <span class="service-tag">♻️ 旧货与再生资源</span>
+                <span class="service-tag">♻️ 旧货与再生资源）</span>
                 <span class="service-tag">🛍️ 日用百货销售</span>
             </div>
-            <div style="text-align: center; margin-top: 32px; color: #8ea3c2; font-size: 0.85rem;">
+            <div style="text-align: center; margin-top: 20px; color: #8ea3c2; font-size: 0.85rem;">
                 * 所有旧货销售均依法标注“旧货”标识，再生资源回收不含生产性废旧金属，合规经营。
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心优势板块 (新增) -->
+    <section id="advantages" class="section">
+        <div class="container">
+            <div class="section-title">为什么选择我们</div>
+            <div class="advantages-grid">
+                <div class="adv-card">
+                    <div class="adv-icon">✅</div>
+                    <h3>资质齐全 · 合规先行</h3>
+                    <p>持有互联网销售、进出口代理、旧货标识、再生资源回收等完整资质，每一笔交易合法透明。</p>
+                </div>
+                <div class="adv-card">
+                    <div class="adv-icon">🌍</div>
+                    <h3>全球供应链网络</h3>
+                    <p>深耕货物/技术进出口，对接多国优质渠道，提供高效代理与清关服务。</p>
+                </div>
+                <div class="adv-card">
+                    <div class="adv-icon">♻️</div>
+                    <h3>旧货循环专家</h3>
+                    <p>专业评估二手商品价值，明确标注“旧货”标识，助力绿色经济与闲置资产盘活。</p>
+                </div>
+                <div class="adv-card">
+                    <div class="adv-icon">⚡</div>
+                    <h3>技术赋能效率</h3>
+                    <p>以数字化工具优化业务流程，提供互联网销售平台支持，让商贸更智能。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 服务流程简图 (增加长度) -->
+    <section class="section">
+        <div class="container">
+            <div class="section-title">合作流程</div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <h4>需求沟通</h4>
+                    <p>电话/微信初步对接，明确您的业务方向</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <h4>方案定制</h4>
+                    <p>根据进出口/旧货/销售需求，出具合作方案</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <h4>合规签约</h4>
+                    <p>明确权责，签署协议，确保资质合规</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <h4>高效执行</h4>
+                    <p>物流/代理/销售全流程跟进，定期反馈</p>
+                </div>
             </div>
         </div>
     </section>
@@ -506,16 +533,16 @@
         <div class="container">
             <div class="section-title">业务生态 · 前瞻布局</div>
             <div class="image-showcase">
-                <div class="img-card fade-up">
-                    <img src="https://picsum.photos/id/20/400/240" alt="全球贸易示意">
-                    <p>🌍 进出口综合服务 | 代理/技术/货物</p>
+                <div class="img-card">
+                    <img src="https://picsum.photos/id/20/400/240" alt="全球贸易">
+                    <p>🌍 进出口综合服务</p>
                 </div>
-                <div class="img-card fade-up">
+                <div class="img-card">
                     <img src="https://picsum.photos/id/96/400/240" alt="互联网科技">
-                    <p>💻 互联网销售 | 科技前沿</p>
+                    <p>💻 互联网销售 | 科技赋能</p>
                 </div>
-                <div class="img-card fade-up">
-                    <img src="https://picsum.photos/id/29/400/240" alt="旧货与再生资源">
+                <div class="img-card">
+                    <img src="https://picsum.photos/id/29/400/240" alt="旧货循环">
                     <p>♻️ 旧货与再生资源 | 绿色合规</p>
                 </div>
             </div>
@@ -523,36 +550,7 @@
         </div>
     </section>
 
-    <!-- 核心价值观 / 使命愿景 -->
-    <section id="values" class="section">
-        <div class="container">
-            <div class="section-title">核心价值观</div>
-            <div class="values-grid">
-                <div class="value-card fade-up">
-                    <div class="value-icon">🔗</div>
-                    <h3>全球链接</h3>
-                    <p>打通国际贸易通道，提供高效进出口代理与技术服务</p>
-                </div>
-                <div class="value-card fade-up">
-                    <div class="value-icon">♻️</div>
-                    <h3>绿色循环</h3>
-                    <p>推动旧货与再生资源合规流通，践行可持续发展</p>
-                </div>
-                <div class="value-card fade-up">
-                    <div class="value-icon">⚖️</div>
-                    <h3>诚信合规</h3>
-                    <p>所有业务依法经营，旧货标识清晰，回收资质完备</p>
-                </div>
-                <div class="value-card fade-up">
-                    <div class="value-icon">💡</div>
-                    <h3>创新驱动</h3>
-                    <p>以科技为引擎，赋能互联网销售与商贸服务</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 关于我们 + 联系方式 -->
+    <!-- 关于我们 -->
     <section id="about" class="section">
         <div class="container">
             <div class="section-title">关于飓智诚</div>
@@ -566,15 +564,15 @@
                 <div class="contact-info-card">
                     <h4>📌 工作室信息</h4>
                     <div class="contact-detail">📍 地址：成都市金堂县白果街道</div>
-                    <div class="contact-detail">📞 电话：<a href="tel:13550462023" style="color:#6ee7b7; text-decoration:none;">13550462023</a></div>
-                    <div class="contact-detail">✉️ 邮箱：<a href="mailto:1530522605@qq.com" style="color:#6ee7b7;">1530522605@qq.com</a></div>
+                    <div class="contact-detail">📞 电话：13550462023</div>
+                    <div class="contact-detail">✉️ 邮箱：1530522605@qq.com</div>
                     <div class="contact-detail">💬 微信号：gcLookahead</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 联系表单区块 -->
+    <!-- 联系表单 -->
     <section id="contact" class="section">
         <div class="container">
             <div class="form-section">
@@ -603,18 +601,16 @@
     </div>
 </footer>
 
-<!-- 悬浮快捷菜单 -->
 <div class="floating-menu">
-    <div class="floating-btn" id="backToTopBtn" title="回到顶部">↑</div>
-    <div class="floating-btn" id="contactFloatBtn" title="联系">✉️</div>
+    <div class="floating-btn" id="backToTopBtn">↑</div>
+    <div class="floating-btn" id="contactFloatBtn">✉️</div>
 </div>
 
 <script>
-    // ======================= 粒子背景 =======================
+    // 粒子背景
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
-    let width = window.innerWidth;
-    let height = window.innerHeight;
+    let width = window.innerWidth, height = window.innerHeight;
     let particles = [];
 
     function resizeCanvas() {
@@ -650,23 +646,16 @@
             ctx.fill();
         }
     }
-
-    for (let i = 0; i < 120; i++) {
-        particles.push(new Particle());
-    }
-
-    function animateParticles() {
+    for (let i = 0; i < 100; i++) particles.push(new Particle());
+    function animate() {
         ctx.clearRect(0, 0, width, height);
-        particles.forEach(p => {
-            p.update();
-            p.draw();
-        });
-        requestAnimationFrame(animateParticles);
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animate);
     }
-    animateParticles();
+    animate();
 
-    // ======================= 滚动淡入动画 (Intersection Observer) =======================
-    const fadeElements = document.querySelectorAll('.fade-up, .value-card, .img-card');
+    // 滚动淡入
+    const fadeElements = document.querySelectorAll('.adv-card, .img-card, .step');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -674,107 +663,64 @@
                 observer.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.1, rootMargin: "0px 0px -20px 0px" });
+    }, { threshold: 0.1 });
     fadeElements.forEach(el => observer.observe(el));
-    // 手动让卡片类也加入可见
-    document.querySelectorAll('.value-card, .img-card').forEach(el => {
-        if (el.classList.contains('fade-up')) return;
-        observer.observe(el);
-    });
+    // 为卡片添加visible样式
+    document.querySelectorAll('.adv-card').forEach(el => el.classList.add('fade-up'));
+    document.querySelectorAll('.img-card').forEach(el => el.classList.add('fade-up'));
+    // 手动添加可见类初始
+    const style = document.createElement('style');
+    style.textContent = `.fade-up { opacity: 0; transform: translateY(30px); transition: all 0.6s; } .fade-up.visible { opacity: 1; transform: translateY(0); }`;
+    document.head.appendChild(style);
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-    // 预让所有 .value-card .img-card 也有可见效果
-    document.querySelectorAll('.value-card').forEach(el => observer.observe(el));
-    document.querySelectorAll('.img-card').forEach(el => observer.observe(el));
+    // 悬浮按钮
+    document.getElementById('backToTopBtn').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    document.getElementById('contactFloatBtn').addEventListener('click', () => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }));
 
-    // ======================= 悬浮按钮 =======================
-    const backBtn = document.getElementById('backToTopBtn');
-    const contactFloat = document.getElementById('contactFloatBtn');
-    backBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-    contactFloat.addEventListener('click', () => {
-        const contactSection = document.getElementById('contact');
-        if (contactSection) contactSection.scrollIntoView({ behavior: 'smooth' });
-    });
-
-    // ======================= EMAILJS 邮件配置（降级友好） =======================
-    // 配置说明：如需真实邮件发送，请去 https://www.emailjs.com/ 注册，并替换以下三个值
-    const EMAILJS_CONFIG = {
-        PUBLIC_KEY: "YOUR_EMAILJS_PUBLIC_KEY",   // 替换为您的 Public Key
-        SERVICE_ID: "YOUR_SERVICE_ID",           // 替换为您的 Service ID
-        TEMPLATE_ID: "YOUR_TEMPLATE_ID"          // 替换为您的 Template ID
-    };
-    const TO_EMAIL = "1530522605@qq.com";
-    let emailJSReady = false;
-    if (EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.PUBLIC_KEY !== "YOUR_EMAILJS_PUBLIC_KEY") {
-        try {
-            emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
-            emailJSReady = true;
-        } catch(e) { console.warn(e); }
+    // EmailJS 降级配置
+    const EMAILJS_CONFIG = { PUBLIC_KEY: "KTToKYZ7Rx-Rx793g", SERVICE_ID: "U67V9qzOyR3yJFUmwAKIt", TEMPLATE_ID: "template_a8lfafl" };
+    let emailReady = false;
+    if (EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
+        emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+        emailReady = true;
     }
-
-    const form = document.getElementById('contactForm');
-    const statusDiv = document.getElementById('formStatus');
-
-    form.addEventListener('submit', async function(e) {
+    const formEl = document.getElementById('contactForm');
+    formEl.addEventListener('submit', async (e) => {
         e.preventDefault();
         const name = document.getElementById('userName').value.trim();
         const contact = document.getElementById('userContact').value.trim();
         const msg = document.getElementById('message').value.trim();
         if (!name || !contact || !msg) {
-            statusDiv.style.color = "#f8b4b4";
-            statusDiv.innerText = "❌ 请完整填写姓名、联系方式及留言内容。";
+            document.getElementById('formStatus').innerText = "❌ 请完整填写所有字段";
             return;
         }
-        const submitBtn = document.getElementById('submitBtn');
-        submitBtn.disabled = true;
-        submitBtn.textContent = "发送中...";
-        statusDiv.style.color = "#b9f3d0";
-        statusDiv.innerText = "⏳ 正在提交...";
-
-        const useRealEmail = emailJSReady && 
-            EMAILJS_CONFIG.SERVICE_ID !== "YOUR_SERVICE_ID" && 
-            EMAILJS_CONFIG.TEMPLATE_ID !== "YOUR_TEMPLATE_ID";
-
-        if (useRealEmail) {
-            const templateParams = {
-                from_name: name,
-                from_contact: contact,
-                message_content: msg,
-                to_email: TO_EMAIL,
-            };
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.textContent = "发送中...";
+        const statusDiv = document.getElementById('formStatus');
+        if (emailReady && EMAILJS_CONFIG.SERVICE_ID !== "YOUR_SERVICE_ID") {
             try {
-                await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, templateParams);
-                statusDiv.style.color = "#a3f0c5";
+                await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, { from_name: name, from_contact: contact, message: msg });
                 statusDiv.innerText = "✅ 留言发送成功！我们会尽快联系您。";
-                form.reset();
+                formEl.reset();
             } catch (err) {
-                statusDiv.style.color = "#f8b4b4";
-                statusDiv.innerText = "⚠️ 邮件发送失败，请稍后再试或直接通过电话/微信联系。";
+                statusDiv.innerText = "⚠️ 发送失败，请直接电话/微信联系。";
             }
         } else {
-            // 降级演示模式
-            statusDiv.style.color = "#d1fae5";
-            statusDiv.innerText = "📨 已收到，我们会尽快联系您（演示模式）。如需真实发送请配置EmailJS。";
-            form.reset();
-            alert(`感谢 ${name} 的留言！当前为网站演示，正式部署后您的消息将直达工作室邮箱。\n联系方式：${contact}`);
+            statusDiv.innerText = "📨 已收到留言（演示模式），正式配置EmailJS后可发送邮件。";
+            formEl.reset();
+            alert(`感谢 ${name} 的留言！当前为演示版本。`);
         }
-        submitBtn.disabled = false;
-        submitBtn.textContent = "发送留言 →";
-        setTimeout(() => {
-            if (statusDiv.innerText.includes("成功") || statusDiv.innerText.includes("收到")) {
-                setTimeout(() => statusDiv.innerText = "", 2000);
-            } else {
-                setTimeout(() => statusDiv.innerText = "", 3000);
-            }
-        }, 4000);
+        btn.disabled = false;
+        btn.textContent = "发送留言 →";
+        setTimeout(() => statusDiv.innerText = "", 3000);
     });
 
-    // 导航平滑滚动
     document.querySelectorAll('.nav-links a').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
-            if (href && href !== "#" && href.startsWith("#")) {
+            if (href && href.startsWith("#")) {
                 e.preventDefault();
                 const target = document.querySelector(href);
                 if (target) target.scrollIntoView({ behavior: 'smooth' });
