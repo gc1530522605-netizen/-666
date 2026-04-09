@@ -470,7 +470,7 @@
         </div>
     </section>
 
-    <!-- 核心优势板块 -->
+    <!-- 核心优势板块 (新增) -->
     <section id="advantages" class="section">
         <div class="container">
             <div class="section-title">为什么选择我们</div>
@@ -499,7 +499,7 @@
         </div>
     </section>
 
-    <!-- 服务流程简图 -->
+    <!-- 服务流程简图 (增加长度) -->
     <section class="section">
         <div class="container">
             <div class="section-title">合作流程</div>
@@ -607,7 +607,7 @@
 </div>
 
 <script>
-    // ======================= 粒子背景 =======================
+    // 粒子背景
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let width = window.innerWidth, height = window.innerHeight;
@@ -654,7 +654,7 @@
     }
     animate();
 
-    // ======================= 滚动淡入效果 =======================
+    // 滚动淡入
     const fadeElements = document.querySelectorAll('.adv-card, .img-card, .step');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -665,132 +665,96 @@
         });
     }, { threshold: 0.1 });
     fadeElements.forEach(el => observer.observe(el));
-    document.querySelectorAll('.adv-card, .img-card').forEach(el => el.classList.add('fade-up'));
+    // 为卡片添加visible样式
+    document.querySelectorAll('.adv-card').forEach(el => el.classList.add('fade-up'));
+    document.querySelectorAll('.img-card').forEach(el => el.classList.add('fade-up'));
+    // 手动添加可见类初始
     const style = document.createElement('style');
     style.textContent = `.fade-up { opacity: 0; transform: translateY(30px); transition: all 0.6s; } .fade-up.visible { opacity: 1; transform: translateY(0); }`;
     document.head.appendChild(style);
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-    // ======================= 悬浮按钮 =======================
+    // 悬浮按钮
     document.getElementById('backToTopBtn').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     document.getElementById('contactFloatBtn').addEventListener('click', () => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }));
 
-    // ======================= EmailJS 真实邮件发送（已移除所有演示模式代码） =======================
-    // EmailJS 配置信息 (根据用户提供)
+    // EmailJS 修正：正确初始化并移除演示模式，仅做真实发送
     const EMAILJS_CONFIG = {
         PUBLIC_KEY: "KTToKYZ7Rx-Rx793g",
         SERVICE_ID: "U67V9qzOyR3yJFUmwAKIt",
         TEMPLATE_ID: "template_a8lfafl"
     };
 
-    // 初始化 EmailJS (仅当公钥有效时)
-    let emailjsInitialized = false;
+    let emailjsReady = false;
+    // 初始化 EmailJS
     if (EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
         try {
             emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
-            emailjsInitialized = true;
+            emailjsReady = true;
         } catch (initErr) {
             console.warn("EmailJS init error:", initErr);
-            emailjsInitialized = false;
+            emailjsReady = false;
         }
     }
 
-    // 获取表单元素
-    const contactForm = document.getElementById('contactForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const formStatus = document.getElementById('formStatus');
-
-    // 统一的表单提交处理（无演示模式，完全基于真实邮件服务）
-    contactForm.addEventListener('submit', async (e) => {
+    const formEl = document.getElementById('contactForm');
+    formEl.addEventListener('submit', async (e) => {
         e.preventDefault();
-
-        // 获取表单字段
         const name = document.getElementById('userName').value.trim();
         const contact = document.getElementById('userContact').value.trim();
         const msg = document.getElementById('message').value.trim();
-
-        // 基础校验
+        const statusDiv = document.getElementById('formStatus');
+        
         if (!name || !contact || !msg) {
-            formStatus.innerText = "❌ 请完整填写所有字段（姓名、联系方式、需求）";
+            statusDiv.innerText = "❌ 请完整填写所有字段";
             return;
         }
-
-        // 检查 EmailJS 库是否加载
-        if (typeof emailjs === 'undefined' || !emailjs.send) {
-            formStatus.innerText = "⚠️ 邮件服务暂时不可用，请直接通过电话/微信联系我们，抱歉给您带来不便。";
+        
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.textContent = "发送中...";
+        
+        // 检查 emailjs 库是否加载以及初始化是否成功
+        if (typeof emailjs === 'undefined' || !emailjs.send || !emailjsReady) {
+            statusDiv.innerText = "⚠️ 邮件服务暂不可用，请直接致电 13550462023 或添加微信 gcLookahead，我们会尽快与您联系。";
+            btn.disabled = false;
+            btn.textContent = "发送留言 →";
             return;
         }
-
-        // 检查 EmailJS 是否已成功初始化
-        if (!emailjsInitialized) {
-            formStatus.innerText = "⚠️ 邮件服务配置未就绪，请拨打 13550462023 或添加微信 gcLookahead 直接沟通，感谢理解。";
-            return;
-        }
-
-        // 检查服务ID和模板ID是否完整
-        if (!EMAILJS_CONFIG.SERVICE_ID || !EMAILJS_CONFIG.TEMPLATE_ID) {
-            formStatus.innerText = "⚠️ 邮件参数缺失，请通过备用联系方式（电话/微信）与我们联系。";
-            return;
-        }
-
-        // 禁用按钮，显示发送中状态
-        submitBtn.disabled = true;
-        submitBtn.textContent = "发送中...";
-        formStatus.innerText = "📡 正在提交，请稍后...";
-
+        
         try {
-            // 调用 EmailJS 发送邮件
             const templateParams = {
                 from_name: name,
                 from_contact: contact,
                 message: msg,
-                // 增加时间戳便于辨识
-                reply_to: contact,
-                subject: `【飓智诚咨询】${name} 的需求`
+                reply_to: contact
             };
-
-            const response = await emailjs.send(
-                EMAILJS_CONFIG.SERVICE_ID,
-                EMAILJS_CONFIG.TEMPLATE_ID,
-                templateParams
-            );
-
-            // 发送成功
-            formStatus.innerText = "✅ 留言发送成功！我们将在24小时内通过您留下的联系方式与您对接。";
-            contactForm.reset();   // 清空表单
+            await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, templateParams);
+            statusDiv.innerText = "✅ 留言发送成功！我们会尽快联系您。";
+            formEl.reset();
         } catch (err) {
-            console.error("EmailJS发送失败:", err);
+            console.error("EmailJS send error:", err);
             let errorMsg = "⚠️ 留言发送失败，请稍后重试或直接致电 13550462023 / 微信 gcLookahead 联系。";
-            // 针对常见错误给出更友好的提示
-            if (err.text) {
-                if (err.text.includes("template") || err.text.includes("not found")) {
-                    errorMsg = "⚠️ 邮件模板配置异常，已通知管理员。请直接通过电话/微信联系我们，谢谢。";
-                } else if (err.text.includes("service") || err.text.includes("invalid")) {
-                    errorMsg = "⚠️ 邮件服务暂时异常，请拨打官方电话 13550462023 进行咨询。";
-                }
+            // 针对常见错误给出更友好提示（可选）
+            if (err.text && err.text.includes("template")) {
+                errorMsg = "⚠️ 邮件模板配置异常，已通知管理员。请直接通过电话/微信联系我们，谢谢。";
+            } else if (err.text && err.text.includes("service")) {
+                errorMsg = "⚠️ 邮件服务暂时异常，请拨打官方电话 13550462023 进行咨询。";
             }
-            formStatus.innerText = errorMsg;
+            statusDiv.innerText = errorMsg;
         } finally {
-            // 恢复按钮状态
-            submitBtn.disabled = false;
-            submitBtn.textContent = "发送留言 →";
-            // 5秒后自动清除状态信息（成功或失败后保留足够时间阅读）
+            btn.disabled = false;
+            btn.textContent = "发送留言 →";
             setTimeout(() => {
-                if (formStatus.innerText !== "✅ 留言发送成功！我们将在24小时内通过您留下的联系方式与您对接。") {
-                    // 若不是成功信息，不清除过快，但为了整洁，10秒后再清除
-                    setTimeout(() => {
-                        if (formStatus.innerText !== "✅ 留言发送成功！我们将在24小时内通过您留下的联系方式与您对接。") {
-                            formStatus.innerText = "";
-                        }
-                    }, 5000);
+                if (statusDiv.innerText !== "✅ 留言发送成功！我们会尽快联系您。") {
+                    // 保留错误信息稍长时间，但不强制清除
                 } else {
-                    setTimeout(() => { if(formStatus.innerText.includes("成功")) formStatus.innerText = ""; }, 6000);
+                    setTimeout(() => { if(statusDiv.innerText.includes("成功")) statusDiv.innerText = ""; }, 5000);
                 }
-            }, 5000);
+            }, 4000);
         }
     });
 
-    // ======================= 导航平滑滚动 =======================
     document.querySelectorAll('.nav-links a').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
