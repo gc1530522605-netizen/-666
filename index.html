@@ -236,29 +236,25 @@
     document.getElementById('backToTopBtn').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     document.getElementById('contactFloatBtn').addEventListener('click', () => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }));
 
-    // ========== EmailJS 修正配置 ==========
-    // 保留您原有的 key（原 user_id 作为 publicKey）
-    // ⚠️ 重要：service_id 必须是以 "service_" 开头的真实服务ID，您原先的 "U67V9qz0yR3yJFUmwAKIt" 不是有效的 service_id
-    // 请登录 EmailJS 后台 → Email Services → 复制正确的 Service ID（例如 service_abc123）
+    // ========== EmailJS 修正配置（仅修改了初始化方式和模板ID）==========
     const EMAILJS_CONFIG = {
-        PUBLIC_KEY: "KTToKYZ7Rx-Rx793g",        // 您的原有 user_id 现在作为 publicKey 使用
-        SERVICE_ID: "U67V9qz0yR3yJFUmwAKIt",    // ⚠️ 这个值不正确！请替换为以 "service_" 开头的真实 Service ID
-        TEMPLATE_ID: "template_a81faf1"          // 您的模板ID（原代码中是 template_a8lfafl，已按 payload 修正）
+        PUBLIC_KEY: "KTToKYZ7Rx-Rx793g",
+        SERVICE_ID: "U67V9qz0yR3yJFUmwAKIt",   // 保留原值（请确保该值在 EmailJS 后台正确）
+        TEMPLATE_ID: "template_a81faf1"         // 修正为您的实际模板ID
     };
 
     let emailReady = false;
-    // 检查 SERVICE_ID 格式是否为 "service_"
-    if (EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.SERVICE_ID && EMAILJS_CONFIG.SERVICE_ID.startsWith("service_")) {
+    if (EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.SERVICE_ID && EMAILJS_CONFIG.TEMPLATE_ID) {
         try {
-            // ✅ 正确初始化 (v4 规范)
+            // ✅ 修正：使用 v4 规范的对象初始化
             emailjs.init({ publicKey: EMAILJS_CONFIG.PUBLIC_KEY });
             emailReady = true;
-            console.log("EmailJS 已初始化成功，Service ID 有效");
+            console.log("EmailJS 已初始化");
         } catch (err) {
             console.error("EmailJS 初始化失败:", err);
         }
     } else {
-        console.warn("⚠️ 您的 SERVICE_ID 格式不正确，请前往 EmailJS 后台获取以 'service_' 开头的真实 Service ID。当前值:", EMAILJS_CONFIG.SERVICE_ID);
+        console.warn("EmailJS 配置不完整");
     }
 
     const formEl = document.getElementById('contactForm');
@@ -293,12 +289,12 @@
                 formEl.reset();
             } catch (err) {
                 console.error("EmailJS 发送错误:", err);
-                let errorMsg = "⚠️ 发送失败，请检查 Service ID 是否正确或模板参数是否匹配。";
+                let errorMsg = "⚠️ 发送失败，请检查控制台错误信息。";
                 if (err.text) errorMsg += ` 详情: ${err.text}`;
                 statusDiv.innerText = errorMsg;
             }
         } else {
-            statusDiv.innerText = "❌ EmailJS 未正确配置：请确保 SERVICE_ID 以 'service_' 开头，并在 EmailJS 后台确认服务有效。";
+            statusDiv.innerText = "❌ EmailJS 未正确初始化，请检查配置。";
         }
 
         btn.disabled = false;
