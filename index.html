@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>飓智诚网络科技工作室 | 科技驱动全球</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -140,6 +141,7 @@
             border-radius: 4px;
         }
 
+        /* 胶囊标签 */
         .services-grid {
             display: flex;
             flex-wrap: wrap;
@@ -165,6 +167,7 @@
             background: rgba(30, 50, 55, 0.9);
         }
 
+        /* 核心优势卡片 */
         .advantages-grid {
             display: flex;
             flex-wrap: wrap;
@@ -207,6 +210,7 @@
             font-size: 0.9rem;
         }
 
+        /* 服务流程步骤 */
         .steps {
             display: flex;
             flex-wrap: wrap;
@@ -241,6 +245,7 @@
             margin-bottom: 8px;
         }
 
+        /* 图片展示区 */
         .image-showcase {
             display: flex;
             flex-wrap: wrap;
@@ -278,6 +283,7 @@
             color: #c5f0db;
         }
 
+        /* 关于区域 */
         .about-wrapper {
             display: flex;
             flex-wrap: wrap;
@@ -312,6 +318,7 @@
             color: #cbdae9;
         }
 
+        /* 表单 */
         .form-section {
             margin-top: 60px;
             background: rgba(8, 12, 18, 0.7);
@@ -377,6 +384,7 @@
             color: #6ee7b7;
         }
 
+        /* 悬浮菜单 */
         .floating-menu {
             position: fixed;
             right: 24px;
@@ -446,13 +454,14 @@
         </div>
     </section>
 
+    <!-- 服务范围 -->
     <section id="services" class="section">
         <div class="container">
             <div class="section-title">核心服务范围</div>
             <div class="services-grid">
                 <span class="service-tag">🌐 互联网销售（除需许可商品）</span>
                 <span class="service-tag">📦 进出口综合服务（货物/技术/代理）</span>
-                <span class="service-tag">♻️ 旧货与再生资源</span>
+                <span class="service-tag">♻️ 旧货与再生资源）</span>
                 <span class="service-tag">🛍️ 日用百货销售</span>
             </div>
             <div style="text-align: center; margin-top: 20px; color: #8ea3c2; font-size: 0.85rem;">
@@ -461,6 +470,7 @@
         </div>
     </section>
 
+    <!-- 核心优势板块 (新增) -->
     <section id="advantages" class="section">
         <div class="container">
             <div class="section-title">为什么选择我们</div>
@@ -489,6 +499,7 @@
         </div>
     </section>
 
+    <!-- 服务流程简图 (增加长度) -->
     <section class="section">
         <div class="container">
             <div class="section-title">合作流程</div>
@@ -517,6 +528,7 @@
         </div>
     </section>
 
+    <!-- 图片展示区 -->
     <section class="section">
         <div class="container">
             <div class="section-title">业务生态 · 前瞻布局</div>
@@ -538,6 +550,7 @@
         </div>
     </section>
 
+    <!-- 关于我们 -->
     <section id="about" class="section">
         <div class="container">
             <div class="section-title">关于飓智诚</div>
@@ -559,6 +572,7 @@
         </div>
     </section>
 
+    <!-- 联系表单 -->
     <section id="contact" class="section">
         <div class="container">
             <div class="form-section">
@@ -593,7 +607,7 @@
 </div>
 
 <script>
-    // 粒子背景（完全保留原版）
+    // 粒子背景
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let width = window.innerWidth, height = window.innerHeight;
@@ -640,7 +654,7 @@
     }
     animate();
 
-    // 滚动淡入效果（完全保留）
+    // 滚动淡入
     const fadeElements = document.querySelectorAll('.adv-card, .img-card, .step');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -651,18 +665,58 @@
         });
     }, { threshold: 0.1 });
     fadeElements.forEach(el => observer.observe(el));
+    // 为卡片添加visible样式
     document.querySelectorAll('.adv-card').forEach(el => el.classList.add('fade-up'));
     document.querySelectorAll('.img-card').forEach(el => el.classList.add('fade-up'));
+    // 手动添加可见类初始
     const style = document.createElement('style');
     style.textContent = `.fade-up { opacity: 0; transform: translateY(30px); transition: all 0.6s; } .fade-up.visible { opacity: 1; transform: translateY(0); }`;
     document.head.appendChild(style);
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-    // 悬浮按钮（完全保留）
+    // 悬浮按钮
     document.getElementById('backToTopBtn').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     document.getElementById('contactFloatBtn').addEventListener('click', () => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }));
 
-    // 导航平滑滚动（完全保留）
+    // EmailJS 降级配置
+    const EMAILJS_CONFIG = { PUBLIC_KEY: "KTToKYZ7Rx-Rx793g", SERVICE_ID: "service_0hhceea", TEMPLATE_ID: "template_a8lfafl" };
+    let emailReady = false;
+    if (EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
+        emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+        emailReady = true;
+    }
+    const formEl = document.getElementById('contactForm');
+    formEl.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('userName').value.trim();
+        const contact = document.getElementById('userContact').value.trim();
+        const msg = document.getElementById('message').value.trim();
+        if (!name || !contact || !msg) {
+            document.getElementById('formStatus').innerText = "❌ 请完整填写所有字段";
+            return;
+        }
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.textContent = "发送中...";
+        const statusDiv = document.getElementById('formStatus');
+        if (emailReady && EMAILJS_CONFIG.SERVICE_ID !== "YOUR_SERVICE_ID") {
+            try {
+                await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, { from_name: name, from_contact: contact, message: msg });
+                statusDiv.innerText = "✅ 留言发送成功！我们会尽快联系您。";
+                formEl.reset();
+            } catch (err) {
+                statusDiv.innerText = "⚠️ 发送失败，请直接电话/微信联系。";
+            }
+        } else {
+            statusDiv.innerText = "📨 已收到留言（演示模式），正式配置EmailJS后可发送邮件。";
+            formEl.reset();
+            alert(`感谢 ${name} 的留言！当前为演示版本。`);
+        }
+        btn.disabled = false;
+        btn.textContent = "发送留言 →";
+        setTimeout(() => statusDiv.innerText = "", 3000);
+    });
+
     document.querySelectorAll('.nav-links a').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
@@ -672,58 +726,6 @@
                 if (target) target.scrollIntoView({ behavior: 'smooth' });
             }
         });
-    });
-
-    // ========== 表单处理：去掉 EmailJS 与演示模式，改用复制留言并引导联系 ==========
-    const formEl = document.getElementById('contactForm');
-    const statusDiv = document.getElementById('formStatus');
-
-    formEl.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const name = document.getElementById('userName').value.trim();
-        const contact = document.getElementById('userContact').value.trim();
-        const msg = document.getElementById('message').value.trim();
-
-        if (!name || !contact || !msg) {
-            statusDiv.innerText = "❌ 请完整填写所有字段";
-            return;
-        }
-
-        const btn = document.getElementById('submitBtn');
-        btn.disabled = true;
-        btn.textContent = "生成留言...";
-
-        // 构建留言内容
-        const messageText = `【飓智诚咨询】\n姓名/机构：${name}\n联系方式：${contact}\n需求描述：${msg}\n提交时间：${new Date().toLocaleString()}`;
-
-        // 尝试复制到剪贴板
-        let copySuccess = false;
-        try {
-            await navigator.clipboard.writeText(messageText);
-            copySuccess = true;
-        } catch (err) {
-            console.warn("复制失败", err);
-            copySuccess = false;
-        }
-
-        if (copySuccess) {
-            statusDiv.innerHTML = `✅ 已自动复制您的留言内容。<br>📱 请打开微信搜索 <strong style="color:#6ee7b7;">gcLookahead</strong> 或致电 <strong style="color:#6ee7b7;">13550462023</strong>，粘贴留言即可快速对接。`;
-        } else {
-            // 降级：显示留言内容供手动复制
-            statusDiv.innerHTML = `⚠️ 无法自动复制，请手动复制下方内容并联系微信 <strong>gcLookahead</strong> 或致电 13550462023。<br><textarea rows="4" style="width:100%; margin-top:10px; background:#0a0f16; color:#cbd5e6; border:1px solid #2b8c54; border-radius:12px; padding:8px;" readonly>${messageText}</textarea>`;
-        }
-
-        // 清空表单（可选，让用户知道已提交）
-        formEl.reset();
-        btn.disabled = false;
-        btn.textContent = "发送留言 →";
-
-        // 5秒后自动淡化提示（不清空，保留便于操作）
-        setTimeout(() => {
-            if (statusDiv.innerText.includes("已自动复制") || statusDiv.innerText.includes("手动复制")) {
-                // 保留内容不自动清空，但降低透明度或保留
-            }
-        }, 8000);
     });
 </script>
 </body>
